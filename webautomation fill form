@@ -1,0 +1,64 @@
+import unittest
+import sys
+import time
+from selenium import webdriver
+
+username = "makeyours156" # Replace the username
+access_key = "z4YLl0bFJuLXL6oShcOD63E6ggBUsfhnvuStmyZdHWYot8DRVF" # Replace the access key
+
+class FirstSampleTest(unittest.TestCase):
+    # Generate capabilites from here: https://www.lambdatest.com/capabilities-generator/
+    # setUp runs before each test case and 
+    def setUp(self):
+        desired_caps = {
+            "build": 'PyunitTest sample build', # Change your build name here
+            "name": 'Py-unittest123', # Change your test name here
+            "browserName": 'Chrome',
+            "version": '92.0',
+            "platform": 'Windows 10',
+            "resolution": '1024x768',
+            "console": 'true', # Enable or disable console logs
+            "network":'true'   # Enable or disable network logs
+        }
+        self.driver = webdriver.Remote(
+            command_executor="https://{}:{}@hub.lambdatest.com/wd/hub".format(username, access_key),
+            desired_capabilities= desired_caps)
+
+# tearDown runs after each test case
+    def tearDown(self):
+        self.driver.quit()
+# tearDown runs after each test case
+    def tearDown(self):
+        self.driver.quit()
+    # """ You can write the test cases here """
+    def test_unit_user_should_able_to_add_item(self):
+        # try:
+        driver = self.driver
+
+        # Url
+        driver.get("https://docs.google.com/forms/d/e/1FAIpQLSek4lvyKCkjeKHJwRRSUdsNb4WCIohFNlog7YjeWVzmEr3DQQ/viewform")
+
+        time.sleep(2)
+
+        LastName = "Kattimani"
+        last = driver.find_element_by_xpath('//*[@id="mG61Hd"]/div[2]/div/div[2]/div[1]/div/div/div[2]/div/div[1]/div/div[1]/input')
+        last.send_keys(LastName)
+
+        FirstName = "Rishab"
+        first = driver.find_element_by_xpath('//*[@id="mG61Hd"]/div[2]/div/div[2]/div[2]/div/div/div[2]/div/div[1]/div/div[1]/input')
+        first.send_keys(FirstName)
+
+        RadioButtonPeriod = driver.find_element_by_xpath('//*[@id="mG61Hd"]/div[2]/div/div[2]/div[3]/div/div/div[2]/div[1]/div/span/div/div[2]/label/div/div[1]/div/div[3]/div')
+        RadioButtonPeriod.click()
+
+        Submit = driver.find_element_by_xpath('//*[@id="mG61Hd"]/div[2]/div/div[3]/div[1]/div/div/span')
+        Submit.click()
+
+        get_confirmation_div_text = driver.find_element_by_css_selector('.freebirdFormviewerViewResponseConfirmationMessage')
+        print(get_confirmation_div_text.text)
+        if ((get_confirmation_div_text.text) == "Thank you for attending"):
+            print ("Test Was Successful")
+        else:
+            print("Test Was Not Successful")
+if __name__ == "__main__":
+    unittest.main()
